@@ -9,13 +9,13 @@ def fetch_crypto_prices
   # Initialisation d'un array pour stocker les cryptomonnaies et leurs cours
   crypto_array = []
 
-  # Sélectionne les éléments HTML contenant les noms et les prix des cryptomonnaies
-  page.css('tr.cmc-table-row').each do |row|
+  # Utilisation de xpath pour sélectionner les lignes de la table contenant les données des cryptomonnaies
+  page.xpath('//tr[contains(@class, "cmc-table-row")]').each do |row|
     # Récupère le nom de la cryptomonnaie
-    name = row.css('td.cmc-table__cell--sort-by__symbol').text
+    name = row.xpath('.//td[contains(@class, "cmc-table__cell--sort-by__symbol")]').text.strip
 
     # Récupère le prix de la cryptomonnaie et le convertit en float
-    price = row.css('td.cmc-table__cell--sort-by__price').text.gsub(/[^\d\.]/, '').to_f
+    price = row.xpath('.//td[contains(@class, "cmc-table__cell--sort-by__price")]').text.strip.gsub(/[^\d\.]/, '').to_f
 
     # Ajoute un hash avec le nom et le prix dans l'array
     crypto_array << { name => price }
