@@ -10,7 +10,7 @@ end
 
 # Cette méthode récupère les URLs de toutes les mairies du Val d'Oise
 def get_townhall_urls
-  page = Nokogiri::HTML(URI.open('http://annuaire-des-mairies.com/val-d-oise.html'))
+  page = Nokogiri::HTML(URI.open('https://www.annuaire-mairie.fr/departement-val-d-oise.html'))
   urls = []
 
   # Sélectionne les liens vers les pages des mairies

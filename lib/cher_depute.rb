@@ -7,15 +7,16 @@ def fetch_deputy_emails
   deputies = []
 
   # Sélectionne les liens vers les pages des députés
-  page.css('div.list_table a').each do |link|
-    deputy_page = Nokogiri::HTML(URI.open("https://www.nosdeputes.fr" + link['href']))
+  page.xpath('//div[@class="list_table"]//a').each do |link|
     
-    # Récupère les informations du député
-    name = deputy_page.css('h1.title span').text.strip
-    email = deputy_page.css('a.email').text.strip
+    deputy_page = Nokogiri::HTML(URI.open("https://www.nosdeputes.fr" + link['href']))
 
-    first_name = name.split.first
-    last_name = name.split.last
+    # Récupère les informations du député
+    name = deputy_page.xpath('//div[@class="info_depute"]/h1').text.strip.gsub(' ', '_')
+    email = deputy_page.xpath('//a[contains(@href, "@assemblee-nationale.fr")]').text.strip
+
+    first_name = name.split('_').first
+    last_name = name.split('_').last
 
     deputies << { 'first_name' => first_name, 'last_name' => last_name, 'email' => email }
 
@@ -23,7 +24,7 @@ def fetch_deputy_emails
     puts "#{first_name} #{last_name}: #{email}"
   end
 
-  deputies
+  return deputies
 end
 
 # Appelle la méthode pour exécuter le scraping
